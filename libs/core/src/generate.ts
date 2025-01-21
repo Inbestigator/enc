@@ -3,7 +3,7 @@ export type AlgoOptions =
   | EcKeyGenParams
   | AesKeyGenParams
   | HmacKeyGenParams
-  | AlgorithmIdentifier;
+  | Algorithm;
 
 export interface KeyGenParams<T extends AlgoOptions> {
   algorithm: T;

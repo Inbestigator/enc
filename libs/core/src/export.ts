@@ -54,21 +54,15 @@ export function importKey<T extends AlgoOptions, F extends KeyFormat>(
   options: KeyGenParams<T>,
   extractable?: boolean,
 ): Promise<CryptoKey> {
-  const keyUsages = options.keyUsages.filter((usage) => {
-    if (
-      type === "public" &&
-      (usage === "sign" || usage === "unwrapKey" || usage === "decrypt")
-    ) {
-      return false;
-    }
-    if (
-      type === "private" &&
-      (usage === "verify" || usage === "wrapKey" || usage === "encrypt")
-    ) {
-      return false;
-    }
-    return true;
-  });
+  const keyUsages = options.keyUsages.filter((usage) =>
+    !(
+      (type === "public" &&
+        (usage === "sign" || usage === "unwrapKey" || usage === "decrypt" ||
+          options.algorithm.name === "ECDH")) ||
+      (type === "private" &&
+        (usage === "verify" || usage === "wrapKey" || usage === "encrypt"))
+    )
+  );
   if (format === "jwk") {
     return crypto.subtle.importKey(
       format,
